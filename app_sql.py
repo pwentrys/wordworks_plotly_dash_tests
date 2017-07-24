@@ -2,16 +2,19 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import os
+from datetime import datetime
 from utilities.WordWorks import WordWorks as wordings
 
 from sqlalchemy import create_engine
 import pandas as pd
 
 
+time_start = datetime.now()
+print(f'Starting At: {time_start}\n\n')
 engine = create_engine('mysql+pymysql://gappi:92cf6cc2050f9830996b42433da09d03a4baa26e5524b3b8075c2f076451650a@192.168.1.172:3306/stocks?charset=utf8')
 conn = engine.connect()
 conn.execute('TRUNCATE stock_word;')
-read = pd.read_sql('SELECT title, description FROM stock_scrape WHERE stock_id = 12;', conn)
+read = pd.read_sql('SELECT title, description FROM stock_scrape LIMIT 50000;', conn)
 import pprint
 
 results = wordings.do_dicts([
@@ -59,9 +62,20 @@ def create_inserts(stock_words):
 inserts = create_inserts(stock_words)
 if len(inserts) > 0:
     for insert in inserts:
-        query = f"{insert_prefix}{insert}"
-        print(query)
-        conn.execute(query)
+        query_string = ''
+        try:
+            query_string = ''.join([insert_prefix, insert])
+            conn.execute(query_string)
+        except Exception as error:
+            print(f'ERROR INSERTING {query_string}')
+            print(error)
+            print('\n')
+
+time_end = datetime.now()
+print(f'Started: {time_start}\n' 
+      f'Ended: {time_end}\n' 
+      f'Duration: {time_end-time_start}')
+
 # pprint.pprint(dir(read.get('description')))
 # wordings.do_dicts(read)
 # conn.execute()
