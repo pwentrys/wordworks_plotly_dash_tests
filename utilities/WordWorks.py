@@ -211,6 +211,7 @@ class WordWorks:
             'ź': 'z',
             '☼': ' ',
             "'s": ' ',
+            '´s': ' ',
             "won't": 'will not',
             "dn't": 'd not',
             "n't": 'n not',
@@ -525,6 +526,18 @@ class WordWorks:
                 return temp
         if string.endswith('lled'):
             temp = string[:-3]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('rity'):
+            temp = string[:-3]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('rize'):
+            temp = string[:-3]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('rization'):
+            temp = string[:-7]
             if key_list.__contains__(temp):
                 return temp
         if string.endswith('ity'):
