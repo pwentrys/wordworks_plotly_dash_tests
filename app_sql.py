@@ -22,6 +22,7 @@ results = wordings.do_dicts([
 ])
 # pprint.pprint(results)
 
+
 class StockWord:
     def __init__(self, name, count):
         self.name = name
