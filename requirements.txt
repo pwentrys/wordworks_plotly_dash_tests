@@ -1,0 +1,8 @@
+dash==0.17.7  # The core dash backend
+dash-renderer==0.7.4  # The dash front-end
+dash-html-components==0.7.0  # HTML components
+dash-core-components==0.6.0  # Supercharged components
+pandas
+plotly==2.0.12  # Plotly graphing library used in examples
+pymysql
+sqlalchemy
