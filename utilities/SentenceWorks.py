@@ -43,7 +43,7 @@ class SentenceWorks:
         res = set(res)
         return res
 
-    PUNCTUATION_CONTAIN_REPLACE_EMPTY = [',', '"', ';']
+    PUNCTUATION_CONTAIN_REPLACE_EMPTY = [',', '"', '<', '>', '(', ')', ';']
 
     @staticmethod
     def _remove_punctuation(sentence: str):
@@ -59,6 +59,7 @@ class SentenceWorks:
     def _extract_from_sentences(paragraph: str):
         result = []
         sentences = paragraph.replace('.\n', '. ')
+        sentences = sentences.replace('—', ' ')
         sentences = sentences.split('. ')
         for sentence in sentences:
             result.extend(SentenceWorks._extract_from_sentence(sentence))
