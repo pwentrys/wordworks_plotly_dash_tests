@@ -33,26 +33,31 @@ class WordWorks:
         'begins': {},
         'contains': {
             'space-x': 'spacex',
+            '-': ' ',
             "^": '',
+            "'s": '',
+            "'t": ' not',
+            '®': '',
+            '’': '',
             '…': '',
             '_': '',
             '"': '',
             '¿': '',
+            '?': '',
             '–': ' ',
             "—": '',
             "*": '',
             "=": '',
             "$": '',
-            '-': ' ',
             '!': ' ',
-            "'s": '',
-            "'": ' ',
+            "'": '',
             "~": '',
             "«": '',
             "←": '',
             "”": '',
             "ღ": '',
             "•": '',
+            '™': '',
             "“": '',
             ".com": ' ',
             "www.": ' ',
@@ -60,7 +65,6 @@ class WordWorks:
             ",": ' ',
             ";": ' ',
             ".": ' ',
-            "?": ' ',
             "/": ' ',
             "\\": ' ',
             ":": ' ',
@@ -68,12 +72,16 @@ class WordWorks:
             "&": ' ',
             "(": ' ',
             ")": ' ',
-            "@": ' ',
-            "[": ' ',
-            "...": ' ',
-            "]": ' ',
+            '<': '',
+            '>': '',
+            "@": '',
+            "[": '',
+            "...": '',
+            "]": '',
         },
-        'ends': {},
+        'ends': {
+            "%": ' percent',
+        },
         'is': {},
     }
     POST = {
@@ -200,10 +208,11 @@ class WordWorks:
         return dictionary
 
     @staticmethod
-    def _cleanup_dict(dictionary: dict) -> dict:
+    def _cleanup_dict_repetitioned(dictionary: dict) -> dict:
         keys = dictionary.keys()
         key_deletes = []
         key_list = [_key for _key in keys]
+        key_list = sorted(key_list)
         for key in key_list:
             repetitioned = WordWorks._check_for_repetition(key)
             if key != repetitioned:
@@ -216,6 +225,109 @@ class WordWorks:
         return dictionary
 
     @staticmethod
+    def _cleanup_dict_singular(string, key_list):
+        temp = string
+        if string.endswith('es'):
+            temp = string[:-2]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ably'):
+            temp = f'{string[:-1]}e'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('s'):
+            temp = string[:-1]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ted'):
+            temp = string[:-2]
+            if key_list.__contains__(temp):
+                return temp
+            temp = string[:-1]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ity'):
+            temp = f'{string[:-3]}e'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ily'):
+            temp = f'{string[:-3]}y'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ies'):
+            temp = f'{string[:-3]}y'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ory'):
+            temp = f'{string[:-3]}e'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ves'):
+            temp = f'{string[:-3]}f'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ly'):
+            temp = string[:-2]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ed'):
+            temp = string[:-2]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ive'):
+            temp = string[:-3]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ious'):
+            temp = f'{string[:-2]}n'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ions'):
+            temp = string[:-1]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ness'):
+            temp = string[:-4]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('er'):
+            temp = string[:-2]
+            if key_list.__contains__(temp):
+                return temp
+            temp = string[:-1]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ings'):
+            temp = string[:-4]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ing'):
+            temp = string[:-3]
+            if key_list.__contains__(temp):
+                return temp
+            temp = f'{string[:-3]}e'
+            if key_list.__contains__(temp):
+                return temp
+        return string
+
+    @staticmethod
+    def _cleanup_dict_singularify(dictionary: dict) -> dict:
+        keys = dictionary.keys()
+        key_deletes = []
+        key_list = [_key for _key in keys]
+        key_list = sorted(key_list)
+        for key in key_list:
+            string = WordWorks._cleanup_dict_singular(key, key_list)
+            if string != key:
+                if key_list.__contains__(string):
+                    dictionary[string] += dictionary[key]
+                else:
+                    dictionary[string] = dictionary[key]
+                key_deletes.append(key)
+        dictionary = WordWorks._key_deletes(dictionary, key_deletes)
+        return dictionary
+
+    @staticmethod
     def do_dicts(resultss):
         dictionary = {}
         for results in resultss:
@@ -223,5 +335,6 @@ class WordWorks:
                 result = WordWorks._preclean_word(result)
                 result_split = result.split(' ')
                 dictionary = WordWorks._do_results(dictionary, result_split)
-        dictionary = WordWorks._cleanup_dict(dictionary)
+        dictionary = WordWorks._cleanup_dict_repetitioned(dictionary)
+        dictionary = WordWorks._cleanup_dict_singularify(dictionary)
         return dictionary

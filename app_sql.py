@@ -59,8 +59,9 @@ def create_inserts(stock_words):
 inserts = create_inserts(stock_words)
 if len(inserts) > 0:
     for insert in inserts:
-        query = f'{insert_prefix}{insert}'
+        query = f"{insert_prefix}{insert}"
         print(query)
+        conn.execute(query)
 # pprint.pprint(dir(read.get('description')))
 # wordings.do_dicts(read)
 # conn.execute()
