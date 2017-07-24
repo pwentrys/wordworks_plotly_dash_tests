@@ -38,11 +38,8 @@ class WordWorks:
             '-': ' ',
             '－': ' ',
             "^": ' ',
-            'æ': 'ae',
-            'ð': 'o',
-            'õ': 'o',
-            'ø': 'o',
             'α': 'a',
+            'ẩ': 'a',
             'д': 'a',
             'ấ': 'a',
             'ą': 'a',
@@ -62,6 +59,7 @@ class WordWorks:
             'å': 'a',
             'ạ': 'a',
             'ã': 'a',
+            'æ': 'ae',
             'в': 'b',
             '¢': 'c',
             'ç': 'c',
@@ -70,6 +68,8 @@ class WordWorks:
             'ċ': 'c',
             'č': 'c',
             'с': 'c',
+            'ȼ': 'c',
+            'ƈ': 'c',
             'œ': 'ce',
             'đ': 'd',
             'ď': 'd',
@@ -99,21 +99,8 @@ class WordWorks:
             'ĥ': 'h',
             'н': 'h',
             'ₕ': 'h',
-            'ₒ': 'o',
-            'ƈ': 'c',
-            'ǭ': 'o',
-            'ǫ': 'o',
-            'ȍ': 'o',
-            'ȏ': 'o',
-            'ȟ': 'o',
-            'ȫ': 'o',
-            'ȭ': 'o',
-            'ȯ': 'o',
-            'ȱ': 'o',
-            'ȼ': 'c',
             'ɦ': 'h',
             'ɧ': 'h',
-            'ο': 'o',
             'ħ': 'h',
             'ĩ': 'i',
             'ī': 'i',
@@ -149,7 +136,21 @@ class WordWorks:
             'ộ': 'o',
             'ō': 'o',
             'ŏ': 'o',
+            'ο': 'o',
             'ő': 'o',
+            'ǭ': 'o',
+            'ǫ': 'o',
+            'ȍ': 'o',
+            'ȏ': 'o',
+            'ȟ': 'o',
+            'ₒ': 'o',
+            'ȫ': 'o',
+            'ȭ': 'o',
+            'ȯ': 'o',
+            'ȱ': 'o',
+            'ð': 'o',
+            'õ': 'o',
+            'ø': 'o',
             'ơ': 'o',
             'ô': 'o',
             'ö': 'o',
@@ -264,34 +265,12 @@ class WordWorks:
             '【': ' ',
             '】': ' ',
             '・': ' ',
+            "?": ' ',
         },
         'ends': {
             "%": ' percent',
         },
         'is': {},
-    }
-    POST = {
-        'begins': {},
-        'contains': {
-            "+": ' ',
-            ",": ' ',
-            "?": ' ',
-            "/": ' ',
-            "\\": ' ',
-            ":": ' ',
-            "#": ' ',
-            "&": ' ',
-            "(": ' ',
-            ")": ' ',
-            "@": ' ',
-            "[": ' ',
-            "...": ' ',
-            "]": ' ',
-            "%": ' ',
-        },
-        'ends': {},
-        'is': {},
-
     }
 
     @staticmethod
@@ -320,22 +299,16 @@ class WordWorks:
         return word
 
     @staticmethod
-    def _postclean_word(word: str) -> str:
-        return WordWorks._clean_word(word, WordWorks.POST)
-
-    @staticmethod
     def _do_result(item, dictionary):
         item = WordWorks._preclean_word(item)
         if item != '' and item != '-':
-            item = WordWorks._postclean_word(item)
-            if item != '' and item != '-':
-                if len(item) > 26:
-                    print(item)
+            if len(item) > 26:
+                print(item)
+            else:
+                if dictionary.__contains__(item):
+                    dictionary[item] += 1
                 else:
-                    if dictionary.__contains__(item):
-                        dictionary[item] += 1
-                    else:
-                        dictionary.update({item: 1})
+                    dictionary.update({item: 1})
         return dictionary
 
     @staticmethod
@@ -422,6 +395,9 @@ class WordWorks:
                 return temp
         if string.endswith('s'):
             if string.endswith('ers'):
+                temp = string[:-2]
+                if key_list.__contains__(temp):
+                    return temp
                 temp = string[:-1]
                 if key_list.__contains__(temp):
                     return temp
@@ -460,6 +436,30 @@ class WordWorks:
             if key_list.__contains__(temp):
                 string = temp
 
+        if string.endswith('ension'):
+            temp = f'{string[:-4]}t'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('quel'):
+            temp = f'{string[:-1]}nce'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('umed'):
+            temp = string[:-1]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ushy'):
+            temp = string[:-1]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('tising'):
+            temp = string[:-5]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('tised'):
+            temp = string[:-4]
+            if key_list.__contains__(temp):
+                return temp
         if string.endswith('ainy'):
             temp = string[:-1]
             if key_list.__contains__(temp):
@@ -508,6 +508,14 @@ class WordWorks:
             temp = string[:-3]
             if key_list.__contains__(temp):
                 return temp
+        elif string.endswith('ement'):
+            temp = string[:-4]
+            if key_list.__contains__(temp):
+                return temp
+        elif string.endswith('tedly'):
+            temp = string[:-4]
+            if key_list.__contains__(temp):
+                return temp
         elif string.endswith('ted'):
             temp = string[:-2]
             if key_list.__contains__(temp):
@@ -531,12 +539,27 @@ class WordWorks:
             temp = f'{string[:-3]}e'
             if key_list.__contains__(temp):
                 return temp
+        if string.endswith('ally'):
+            temp = string[:-4]
+            if key_list.__contains__(temp):
+                return temp
         if string.endswith('ly'):
             temp = string[:-2]
             if key_list.__contains__(temp):
                 return temp
+        if string.endswith('ired'):
+            temp = string[:-1]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ived'):
+            temp = f'{string[:-2]}al'
+            if key_list.__contains__(temp):
+                return temp
         if string.endswith('ed'):
             temp = string[:-2]
+            if key_list.__contains__(temp):
+                return temp
+            temp = string[:-1]
             if key_list.__contains__(temp):
                 return temp
         if string.endswith('ive'):
@@ -544,6 +567,18 @@ class WordWorks:
             if key_list.__contains__(temp):
                 return temp
             temp = string[:-3]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ring'):
+            temp = string[:-3]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('cing'):
+            temp = f'{string[:-3]}e'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('tting'):
+            temp = string[:-4]
             if key_list.__contains__(temp):
                 return temp
         if string.endswith('ing'):
