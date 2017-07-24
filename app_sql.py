@@ -14,7 +14,7 @@ print(f'Starting At: {time_start}\n\n')
 engine = create_engine('mysql+pymysql://gappi:92cf6cc2050f9830996b42433da09d03a4baa26e5524b3b8075c2f076451650a@192.168.1.172:3306/stocks?charset=utf8')
 conn = engine.connect()
 conn.execute('TRUNCATE stock_word;')
-read = pd.read_sql('SELECT title, description FROM stock_scrape LIMIT 50000 OFFSET 100000;', conn)
+read = pd.read_sql('SELECT title, description FROM stock_scrape LIMIT 10000000000 OFFSET 150000;', conn)
 
 results = wordings.do_dicts([
     read.get('title').values,

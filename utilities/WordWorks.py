@@ -261,6 +261,9 @@ class WordWorks:
             "]": ' ',
             "%": ' ',
             '（': ' ',
+            '【': ' ',
+            '】': ' ',
+            '・': ' ',
         },
         'ends': {
             "%": ' percent',
@@ -413,10 +416,6 @@ class WordWorks:
     @staticmethod
     def _cleanup_dict_singular(string, key_list):
         temp = string
-        if string.endswith('es'):
-            temp = string[:-2]
-            if key_list.__contains__(temp):
-                return temp
         if string.endswith('ably'):
             temp = f'{string[:-1]}e'
             if key_list.__contains__(temp):
@@ -424,6 +423,10 @@ class WordWorks:
         if string.endswith('s'):
             if string.endswith('ers'):
                 temp = string[:-1]
+                if key_list.__contains__(temp):
+                    return temp
+            if string.endswith('es'):
+                temp = string[:-2]
                 if key_list.__contains__(temp):
                     return temp
             if string.endswith('ings'):
@@ -436,6 +439,9 @@ class WordWorks:
                     return temp
             if string.endswith('ious'):
                 temp = f'{string[:-2]}n'
+                if key_list.__contains__(temp):
+                    return temp
+                temp = f'{string[:-4]}y'
                 if key_list.__contains__(temp):
                     return temp
             if string.endswith('ions'):
@@ -452,8 +458,52 @@ class WordWorks:
                     return temp
             temp = string[:-1]
             if key_list.__contains__(temp):
-                return temp
+                string = temp
 
+        if string.endswith('ainy'):
+            temp = string[:-1]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('tary'):
+            temp = string[:-3]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('tation'):
+            temp = string[:-5]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('cal'):
+            temp = string[:-2]
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('igence'):
+            temp = f'{string[:-6]}ect'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('igance'):
+            temp = f'{string[:-6]}act'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('igent'):
+            temp = f'{string[:-5]}ect'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('igant'):
+            temp = f'{string[:-5]}act'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ation'):
+            temp = f'{string[:-3]}e'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ent'):
+            temp = f'{string[:-1]}ce'
+            if key_list.__contains__(temp):
+                return temp
+        if string.endswith('ant'):
+            temp = f'{string[:-1]}nce'
+            if key_list.__contains__(temp):
+                return temp
         if string.endswith('tted'):
             temp = string[:-3]
             if key_list.__contains__(temp):
@@ -490,6 +540,9 @@ class WordWorks:
             if key_list.__contains__(temp):
                 return temp
         if string.endswith('ive'):
+            temp = f'{string[:-3]}e'
+            if key_list.__contains__(temp):
+                return temp
             temp = string[:-3]
             if key_list.__contains__(temp):
                 return temp
