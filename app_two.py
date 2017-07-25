@@ -80,7 +80,7 @@ class Stock:
         for column in columns:
             cols.append(f"`{column}`")
         cols = ','.join(cols)
-        return f'INSERT INTO {schema}.{table} ({cols}) VALUES '
+        return f'INSERT INTO `{schema}`.`{table}` ({cols}) VALUES '
 
     @staticmethod
     def get_full_insert(schema, table, rows):
@@ -88,9 +88,9 @@ class Stock:
         return f'{prefix}{Stock.get_insert_multiple(rows)};'
 
 
-print(len(out))
-stock_out = Stock.get_full_insert('stocks', 'stock', out)
-print(stock_out)
+if len(out) > 0:
+    stock_query = Stock.get_full_insert('stocks', 'stock', out)
+    sql.execute(stock_query)
 # for row in out.iterrows():
 #     print(row)
 
